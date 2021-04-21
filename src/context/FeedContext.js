@@ -2,7 +2,7 @@ import createDataContext from './createDataContext';
 import { parse } from 'fast-xml-parser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const KEY = 'saved_feeds';
+const KEY = 'items';
 
 const saveItems = async (value) => {
     try {

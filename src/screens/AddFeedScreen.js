@@ -1,27 +1,24 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet } from 'react-native';
-import {Button} from '@material-ui/core';
-import {Context} from '../context/FeedContext';
+import { useContext} from 'react';
+import { StyleSheet } from 'react-native';
+import FeedForm from '../components/FeedForm';
+import {Context} from '../context/FeedListContext';
 
 const AddFeedScreen = ({ navigation }) => {
-    const [addItem] = useState(Context);
-    const [titulo, setTitulo] = useState(initialValues.titulo);
-    const [urlFeed, setUrlFeed] = useState(initialValues.urlFeed);
+    const { addFeed } = useContext(Context);
     
     return (
         <>
-            <View style={styles.row}>
-                <TextInput style={styles.input} required id="titulo" label="Digite o Título" 
-                    value={titulo} onChangeText={text => setTitulo(text)}/>
-                <TextInput style={styles.input} required id="urlFeed" label="Digite a URL do Feed"
-                    value={urlFeed} onChangeText={text => setUrlFeed(text)}/>
-            </View>
-            <View>
-                <Button 
-                    containedPrimary title="Adicionar Feed" 
-                    onSubmit={ (titulo, urlFeed) => 
-                        addItem(titulo, urlFeed, () => navigation.navigate('Index'))}/>
-            </View>
+            <FeedForm 
+                buttonTitle="Adicionar Feed"
+                onSubmit={
+                    (title, content) => {
+                        addFeed(
+                            title,
+                            content,
+                            () => navigation.navigate('Index'))
+                    }
+                }/>
         </>
     );
 };

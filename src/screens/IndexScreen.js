@@ -6,7 +6,7 @@ import { useContext, useEffect } from 'react';
 import { Context } from '../context/FeedListContext'
 
 const IndexScreen = ({ navigation }) => {
-    const { state, deleteFeed, restoreState, deleteAll } = useContext(Context);
+    const { state, deleteFeed, restoreState, deleteAll, getAllFeed } = useContext(Context);
 
     useEffect(() => {
         restoreState();
@@ -17,7 +17,7 @@ const IndexScreen = ({ navigation }) => {
             <Button color="red" title="Apagar tudo" onPress={deleteAll}/>
             <FlatList
                 data={state}
-                keyExtractor={(rssfeed) => rssfeed.urlFeed}
+                keyExtractor={(key) => key.urlFeed}
                 renderItem={({ item }) => {
                     return (
                         <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.urlFeed })}>
@@ -38,9 +38,9 @@ const IndexScreen = ({ navigation }) => {
 IndexScreen.navigationOptions = ({ navigation }) => {
     return {
         headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate('Add')}>
+            <Button onPress={() => navigation.navigate('Add')}>
                 <Feather name="plus" size={30} />
-            </TouchableOpacity>
+            </Button>
         )
     };
 };

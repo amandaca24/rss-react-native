@@ -1,28 +1,67 @@
 import createDataContext from './createDataContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const KEY = 'saved_feeds';
-
+const KEY = 'saved_feed';
+//Método da biblioteca AsyncStore. Ela só salva String, portanto para salvar 
+//objetos é preciso serializá-los para JSON.
 const saveFeeds = async (value) => {
     try {
         const jsonValue = JSON.stringify(value);
         await AsyncStorage.setItem(KEY, jsonValue);
-        console.log('funcionou');
+        console.log('Feed salvo!');
     } catch (e) {
         console.log('erro: ' + e);
     }
 }
 
+//Limpar os dados armazenados com a função própria clear
 const clearStorage = async () => {
     try {
         await AsyncStorage.clear();
-        alert('Funcionou!');
+        alert('Todos os feeds foram apagados');
     }
     catch (e) {
         console.log(e);
         alert('Algum problema ao limpar armazenamento');
+        console.log('erro: ' + e);
     }
 }
+
+//Pegar um objeto armazenado
+const getMyFeed = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@key')
+      return jsonValue != null ? JSON.parse(jsonValue) : null
+    } catch(e) {
+      alert("Algum problema ao buscar um feed");
+    }
+  
+    console.log('Done.')
+  
+  }
+
+  //Vai buscar todas as chaves armazenadas no AsyncStorage
+  const getAllKeys = async () => {
+    let keys = []
+    try {
+      keys = await AsyncStorage.getAllKeys()
+    } catch(e) {
+      alert('Houve algum erro ao recuperar os feeds');
+      console.log('Erro: ' + e);
+    }
+    console.log(keys)
+  }
+
+  const deleteItem = async () => {
+    try {
+        await AsyncStorage.removeItem('@key')
+      } catch(e) {
+        alert('Houve algum problema ao apagar o feed');
+        console.log('Erro: ' + e);
+      }
+    
+      console.log('Done.')
+  }
 
 const feedListReducer = (state, action) => {
     let newState = [];
@@ -41,7 +80,7 @@ const feedListReducer = (state, action) => {
             newState = state.filter(
                 (feed) => feed.urlFeed !== action.payload);
             
-            saveFeeds(newState);
+            deleteItem(newState);
             return newState;
         case 'restore_state':
             newState = action.payload;
@@ -49,6 +88,13 @@ const feedListReducer = (state, action) => {
         case 'delete_all':
             clearStorage();
             return [];
+        case 'get_feed':
+            newState = state.filter(
+                (feed) => feed.urlFeed !== action.payload);
+            getMyFeed(newState);
+            return newState;
+        case 'get_all':
+            return getAllKeys();
         default:
             return state;
     }
@@ -63,6 +109,23 @@ const addFeed = dispatch => {
         console.log('Salvou o feed');
     };
 };
+
+const getFeed = dispatch =>{
+    return(id, callback) => {
+        dispatch({type: 'get_feed', payload: id });
+        if(callback){
+            callback();
+        }
+        console.log('Feed i: ' + id);
+    }
+}
+
+const getAllFeed = dispatch => {
+    return () => {
+        dispatch({ type: 'get_all' });
+    }
+
+}
 
 const deleteFeed = dispatch => {
     return (id) => {
@@ -93,40 +156,7 @@ const deleteAll = dispatch => {
     }
 }
 
-const rssFeeds = [
-    {
-        titulo: 'G1 - Todas as notícias',
-        urlFeed: 'http://g1.globo.com/dynamo/rss2.xml',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    },
-    {
-        titulo: 'G1 - Brasil',
-        urlFeed: 'http://g1.globo.com/dynamo/brasil/rss2.xml',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    },
-    {
-        titulo: 'G1 - Tecnologia e Games',
-        urlFeed: 'http://g1.globo.com/dynamo/tecnologia/rss2.xml',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    },
-    {
-        titulo: 'Jovem Nerd - Site Completo',
-        urlFeed: 'http://jovemnerd.com.br/rss',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    }
-    
-];
-
 export const { Context, Provider } = createDataContext(
     feedListReducer,
-    { addFeed, deleteFeed, restoreState, deleteAll },
-    rssFeeds
+    { addFeed, deleteFeed, restoreState, deleteAll, getAllFeed, getFeed }
 );

@@ -14,7 +14,7 @@ export default () => {
         }
         catch (err) { 
             setErro('Houve algum erro')
-            console.log(err);
+            console.log(err); 
         }
     }
     

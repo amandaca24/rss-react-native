@@ -10,13 +10,13 @@ import rssfeed from '../api/rssfeed';
 const ShowFeedScreen = ({ navigation }) => {
     const feedListContext = useContext(FeedListContext);
     const feedID = navigation.getParam('id');
-    const feed = feedListContext.state.find((feed) => feed.urlFeed === feedID);
-    const fetch = rssfeed(feed.urlFeed);
-    const { state, fetchItems } = useContext(FeedContext);
-    fetchItems(fetch);
+    //const feed = feedListContext.state.find((feed) => feed.urlFeed === feedID);
+    //const fetch = rssfeed(feed.urlFeed);
+    const { state, fetchItems, getFeed } = useContext(FeedContext);
+    fetchItems(getFeed(feedID));
 
     const abrirLink = (link) => {
-        Linking.openURL(link).catch((err) => console.error('An error occurred', err));
+        Linking.openURL(link).catch((err) => console.error('Ocorreu um erro: ', err));
     }
 
     return (
