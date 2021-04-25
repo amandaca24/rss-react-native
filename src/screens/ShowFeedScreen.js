@@ -3,21 +3,22 @@ import { View, Text, StyleSheet, Button, Image, Linking } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { Context as FeedContext } from '../context/FeedContext';
 import { Context as FeedListContext } from '../context/FeedListContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import rssfeed from '../api/rssfeed';
-
+import { FontAwesome } from '@expo/vector-icons';
 
 const ShowFeedScreen = ({ navigation }) => {
-    const { feedListContext, getFeed } = useContext(FeedListContext);
+    const feedListContext = useContext(FeedListContext);
     const feedID = navigation.getParam('id');
-    const feed = getFeed((feed) => feed.urlFeed === feedID);
-    //const fetch = rssfeed(feed.urlFeed);
-    const { state, fetchItems, getFeedItem } = useContext(FeedContext);
-    const items = fetchItems(feed);
-    getFeedItem(items);
+    const feed = feedListContext.state.find((feed) => feed.urlFeed === feedID);
+    const fetch = rssfeed(feed.urlFeed);
+    const { state, fetchItems, deleteItem, restoreState } = useContext(FeedContext);
+    fetchItems(fetch);
 
-    
-
+    useEffect(() => {
+        restoreState();
+    }, []);
+   
     const abrirLink = (link) => {
         Linking.openURL(link).catch((err) => console.error('Ocorreu um erro: ', err));
     }
@@ -34,16 +35,16 @@ const ShowFeedScreen = ({ navigation }) => {
                     return (
                         <>
                             <View style={styles.row}>
-                                <Image style={styles.image}>{item.image}</Image>
+                                <Image style={styles.image} source={{ uri: item.imagem }}/>
                                 <Text style={styles.titulo}>{item.titulo}</Text>
                                 <Text style={styles.dataPublicacao}>{item.dataPublicacao}</Text>
                             </View>
-                            <View>
+                            <View style={styles.row}>
                                 <Text style={styles.descricao} numberOfLines={2} ellipsizeMode='tail' 
                                     onPress={() => abrirLink(item.link)}>
                                         {item.descricao}
                                 </Text>
-
+                                <FontAwesome style={styles.icon} name='trash-o' color='black' onPress={() => deleteItem(item.link)} />
                             </View>
                         </>
                     );
@@ -64,8 +65,9 @@ const styles = StyleSheet.create({
         borderColor: 'gray'
     },
     titulo: {
-        fontSize: 14,
-        fontWeight: 'bold'
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left'
     },
     image: {
         //pode alterar largura e altura como desejar
@@ -75,15 +77,18 @@ const styles = StyleSheet.create({
         margin: 5
     },
     descricao: {
-        fontSize: 8, 
-        flex: 1
+        fontSize: 14, 
+        flex: 1,
+        textAlign: 'justify',
+        textAlignVertical: 'center'
     },
     dataPublicacao: {
         fontSize: 10,
         fontStyle: 'italic'
     },
     icon: {
-        fontSize: 24
+        fontSize: 24,
+        padding: 5,
     }
 });
 

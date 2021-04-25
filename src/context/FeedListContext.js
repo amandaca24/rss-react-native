@@ -92,6 +92,7 @@ const feedListReducer = (state, action) => {
         case 'get_feed':
             newState = state.filter(
                 (feed) => feed.urlFeed !== action.payload);
+            getMyFeed(newState);
             return newState;
         case 'get_all':
             newState = state.getMyFeed;
@@ -113,7 +114,7 @@ const addFeed = dispatch => {
 
 const getFeed = dispatch =>{
     return(id, callback) => {
-        dispatch({type: 'get_feed', payload: id });
+        dispatch({type: 'get_feed', payload: id }).then(console.log);
         if(callback){
             callback();
         }
@@ -172,6 +173,6 @@ const rssFeeds = [
 
 export const { Context, Provider } = createDataContext(
     feedListReducer,
-    { addFeed, deleteFeed, restoreState, deleteAll, getFeeds, getFeed, getAllKeys, getMyFeed }, 
+    { addFeed, deleteFeed, restoreState, deleteAll, getFeeds, getFeed }, 
     rssFeeds
 );

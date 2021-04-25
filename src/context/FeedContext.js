@@ -39,6 +39,17 @@ const getItem = async () => {
   
   }
 
+  const deleteItemStorage = async () => {
+    try {
+        await AsyncStorage.removeItem('@key')
+      } catch(e) {
+        alert('Houve algum problema ao apagar o item');
+        console.log('Erro: ' + e);
+      }
+    
+      console.log('Done.')
+  }
+
 const feedReducer = (state, action) => {
     let newState = [];
     switch (action.type) {
@@ -46,10 +57,14 @@ const feedReducer = (state, action) => {
             newState = [
                 ...state,
                 {
-                    fetchItems: action.payload.feedItems
+                    titulo: action.payload.feedItems.channel.title,
+                    dataPublicacao: feedItems.channel.pubDate,
+                    link: action.payload.feedItems.channel.link,
+                    descricao: action.payload.feedItems.channel.description,
+                    imagem: action.payload.feedItems.channel.image, 
                 }
             ];
-            saveItems(newState)
+            saveItems(newState);
             return newState;
         case 'get_item':
             newState = state.filter(
@@ -58,9 +73,9 @@ const feedReducer = (state, action) => {
             return newState;
         case 'delete_item':
             newState = state.filter(
-                (item) => item.urlFeed !== action.payload);
+                (item) => item.link !== action.payload);
             
-            saveItems(newState);
+            deleteItemStorage(newState);
             return newState;
         case 'restore_state':
             newState = action.payload;
@@ -127,7 +142,6 @@ const rssItems = [
         descricao: 'Depois de uma reunião da cúpula do Congresso com o Palácio do Planalto na noite desta terça-feira (6), o impasse sobre a sanção do Orçamento de 2021 foi mantido e os dois lados não chegaram a um acordo sobre vetos às emendas parlamentares de responsabilidade do relator da proposta. Em jantar na residência oficial do presidente do Senado, Rodrigo Pacheco, com o presidente da Câmara dos Deputados, Arthur Lira, e o ministro da Casa Civil, Luiz Eduardo Ramos, a cúpula do Legislativo deixou claro que não aceita o rompimento do acordo feito com o governo para incluir no Orçamento de 2021 um valor extra de emendas parlamentares de R$ 16,5 bilhões e quer a sanção deste trecho da proposta aprovada no mês passado. Presidente da Câmara, Arthur Lira disse que a posição do Legislativo é que o governo sancione integralmente o chamado RP9, que inclui as emendas negociadas pelo relator do Orçamento, senador Márcio Bittar, que totalizam cerca de R$ 26 bilhões. Depois, o Palácio do Planalto enviaria um projeto de lei do Congresso Nacional (PLN) para recompor despesas obrigatórias do Orçamento no valor de R$ 20 bilhões. O presidente Jair Bolsonaro quer o inverso. Vetar integralmente as emendas de relator, diante da avaliação de que elas foram apresentadas com base em corte de despesas obrigatórias, para evitar o risco de um crime de responsabilidade fiscal que abriria brecha para um pedido de impeachment. Depois do veto, o governo enviaria um PLN para recompor as despesas do orçamento e verbas de emendas parlamentares. Em tom de brincadeira, mas que foi visto com um recado, Arthur Lira disse durante o jantar que, se o governo romper o acordo feito com o Congresso durante a votação da PEC Emergencial, o Palácio do Planalto não vai conseguir aprovar no Legislativo nem um pedido para festa junina. Rodrigo Pacheco fez questão de repetir o que já vem dizendo, que o governo agora não pode jogar a responsabilidade pelas mudanças no Orçamento nas costas do Congresso, porque acompanhou todas as negociações e deu aval para elas, inclusive o corte em despesas obrigatórias e na inclusão de emendas extras para os parlamentares. Pacheco disse que o relator Márcio Bittar está sendo tratado como um inimigo e ele elaborou seu relatório em negociações com a equipe econômica. Bittar fez o corte em despesas obrigatórias do Orçamento depois de receber o sinal verde da equipe de Paulo Guedes. Admite apenas que, durante a votação, o valor das emendas extras ficou R$ 10 bilhões acima do acordado e já sinalizou que pode cortar esse montante assim que o Orçamento for sancionado. Antes de viajar para o Sul, o presidente Jair Bolsonaro foi avisado da manutenção do impasse. A equipe presidencial aguarda seu retorno a Brasília para tomar uma decisão final sobre o Orçamento da União. O governo tem até o dia 22 de abril para sancionar a proposta, com ou sem vetos.',
         imagem: '',
         dataPublicacao: 'Wed, 07 Apr 2021 12:20:19 -0000',
-        urlFeed: 'http://g1.globo.com/dynamo/rss2.xml',
     },
 ];
 
