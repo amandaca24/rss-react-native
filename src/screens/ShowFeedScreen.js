@@ -1,19 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, Image, Linking } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { Context as FeedListContext } from '../context/FeedListContext'
-import { Context as FeedContext } from '../context/FeedContext'
+import { Context as FeedContext } from '../context/FeedContext';
+import { Context as FeedListContext } from '../context/FeedListContext';
 import { useContext } from 'react';
 import rssfeed from '../api/rssfeed';
 
 
 const ShowFeedScreen = ({ navigation }) => {
-    const feedListContext = useContext(FeedListContext);
+    const { feedListContext, getFeed } = useContext(FeedListContext);
     const feedID = navigation.getParam('id');
-    //const feed = feedListContext.state.find((feed) => feed.urlFeed === feedID);
+    const feed = getFeed((feed) => feed.urlFeed === feedID);
     //const fetch = rssfeed(feed.urlFeed);
-    const { state, fetchItems, getFeed } = useContext(FeedContext);
-    fetchItems(getFeed(feedID));
+    const { state, fetchItems, getFeedItem } = useContext(FeedContext);
+    const items = fetchItems(feed);
+    getFeedItem(items);
+
+    
 
     const abrirLink = (link) => {
         Linking.openURL(link).catch((err) => console.error('Ocorreu um erro: ', err));

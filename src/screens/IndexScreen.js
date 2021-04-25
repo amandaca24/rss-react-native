@@ -1,33 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
-import { useContext, useEffect } from 'react';
-import { Context } from '../context/FeedListContext'
+import { useContext, useEffect, useState } from 'react';
+import { Context } from '../context/FeedListContext';
+import { FontAwesome } from '@expo/vector-icons';
 
 const IndexScreen = ({ navigation }) => {
-    const { state, deleteFeed, restoreState, deleteAll, getAllFeed } = useContext(Context);
+    const { state, deleteFeed, restoreState, deleteAll } = useContext(Context);
 
     useEffect(() => {
         restoreState();
     }, []);
 
+    
     return (
         <>
             <Button color="red" title="Apagar tudo" onPress={deleteAll}/>
             <FlatList
                 data={state}
-                keyExtractor={(key) => key.urlFeed}
+                keyExtractor={(feed) => feed.urlFeed}
                 renderItem={({ item }) => {
                     return (
-                        <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.urlFeed })}>
+                        <View>
                             <View style={styles.row}>
                                 <Text style={styles.title}>{item.titulo}</Text>
-                                <TouchableOpacity onPress={() => deleteFeed(item.urlFeed) }>
-                                    <Feather style={styles.icon} name="trash" />
-                                </TouchableOpacity>
+                                <View style={styles.row}>
+                                    <FontAwesome style={styles.icons} name='pencil' size={24} color='black' 
+                                        onPress={() => navigation.navigate('Show', { id: item.urlFeed })} />
+                                    <FontAwesome style={styles.icons} name='trash-o' size={30} color='black' 
+                                        onPress={() => deleteFeed(item.urlFeed) } />
+                                </View>
+                                
+                                
                             </View>
-                        </TouchableOpacity>
+                        </View>
                     ); 
                 }}
             />
@@ -38,9 +44,9 @@ const IndexScreen = ({ navigation }) => {
 IndexScreen.navigationOptions = ({ navigation }) => {
     return {
         headerRight: () => (
-            <Button onPress={() => navigation.navigate('Add')}>
-                <Feather name="plus" size={30} />
-            </Button>
+            <FontAwesome style={styles.icons} name='plus-circle' size={32} color='black' 
+                onPress={() => navigation.navigate('Add')} />
+
         )
     };
 };
@@ -55,14 +61,13 @@ const styles = StyleSheet.create({
         borderColor: 'gray'
     },
     title: {
-        fontSize: 18
+        fontSize: 18, 
+        padding: 5,
     },
-    icon: {
-        fontSize: 24
+    icons: {
+        borderRadius: 5,
+        padding: 5,
     },
-    button: {
-        color: "red",
-    }
 });
 
 export default IndexScreen;

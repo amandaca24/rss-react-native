@@ -7,7 +7,7 @@ const KEY = 'saved_feed';
 const saveFeeds = async (value) => {
     try {
         const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem(KEY, jsonValue);
+        AsyncStorage.setItem(KEY, jsonValue);
         console.log('Feed salvo!');
     } catch (e) {
         console.log('erro: ' + e);
@@ -30,8 +30,9 @@ const clearStorage = async () => {
 //Pegar um objeto armazenado
 const getMyFeed = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@key')
+      const jsonValue = await AsyncStorage.getItem(KEY).then(console.log);
       return jsonValue != null ? JSON.parse(jsonValue) : null
+      
     } catch(e) {
       alert("Algum problema ao buscar um feed");
     }
@@ -44,12 +45,12 @@ const getMyFeed = async () => {
   const getAllKeys = async () => {
     let keys = []
     try {
-      keys = await AsyncStorage.getAllKeys()
+      keys = await AsyncStorage.getAllKeys().then(console.log);
     } catch(e) {
       alert('Houve algum erro ao recuperar os feeds');
       console.log('Erro: ' + e);
     }
-    console.log(keys)
+    console.log("KEYS = " + keys)
   }
 
   const deleteItem = async () => {
@@ -73,7 +74,7 @@ const feedListReducer = (state, action) => {
                     urlFeed: action.payload.urlFeed,
                     titulo: action.payload.titulo
                 }
-            ];
+            ]; 
             saveFeeds(newState)
             return newState;
         case 'delete_feed':
@@ -91,10 +92,10 @@ const feedListReducer = (state, action) => {
         case 'get_feed':
             newState = state.filter(
                 (feed) => feed.urlFeed !== action.payload);
-            getMyFeed(newState);
             return newState;
         case 'get_all':
-            return getAllKeys();
+            newState = state.getMyFeed;
+            return newState;
         default:
             return state;
     }
@@ -106,7 +107,7 @@ const addFeed = dispatch => {
         if (callback) {
             callback();
         }
-        console.log('Salvou o feed');
+        console.log('Titulo e Feed ' + titulo + ' ' + urlFeed);
     };
 };
 
@@ -120,11 +121,14 @@ const getFeed = dispatch =>{
     }
 }
 
-const getAllFeed = dispatch => {
-    return () => {
-        dispatch({ type: 'get_all' });
+const getFeeds = dispatch => {
+    return(savedState, callback) => {
+        dispatch({ type: 'get_all', payload: JSON.parse(savedState) });
+        if(callback){
+            callback();
+        }
+        
     }
-
 }
 
 const deleteFeed = dispatch => {
@@ -156,7 +160,18 @@ const deleteAll = dispatch => {
     }
 }
 
+const rssFeeds = [
+    {
+        titulo: 'G1 - Todas as notícias',
+        urlFeed: 'http://g1.globo.com/dynamo/rss2.xml',
+        descricao: '',
+        urlSite: '',
+        urlImagem: ''
+    }
+];
+
 export const { Context, Provider } = createDataContext(
     feedListReducer,
-    { addFeed, deleteFeed, restoreState, deleteAll, getAllFeed, getFeed }
+    { addFeed, deleteFeed, restoreState, deleteAll, getFeeds, getFeed, getAllKeys, getMyFeed }, 
+    rssFeeds
 );
