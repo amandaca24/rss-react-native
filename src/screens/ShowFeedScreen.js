@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image, Linking } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Image, Linking } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { Context as FeedContext } from '../context/FeedContext';
 import { Context as FeedListContext } from '../context/FeedListContext';
 import { useContext, useEffect } from 'react';
 import rssfeed from '../api/rssfeed';
 import { FontAwesome } from '@expo/vector-icons';
+import useResults from '../hooks/useResults';
 
 const ShowFeedScreen = ({ navigation }) => {
     const feedListContext = useContext(FeedListContext);
@@ -15,23 +16,26 @@ const ShowFeedScreen = ({ navigation }) => {
     const { state, fetchItems, deleteItem, restoreState } = useContext(FeedContext);
     fetchItems(fetch);
 
+    //useResults();
+
     useEffect(() => {
         restoreState();
     }, []);
    
+    //Abre o link no navegador 
     const abrirLink = (link) => {
         Linking.openURL(link).catch((err) => console.error('Ocorreu um erro: ', err));
     }
 
+    //Usa o estado vindo do FeedContext após o fetch no link do feed
+    //para preencher a lista
     return (
         <>
             <FlatList
                 data={state}
                 keyExtractor={(item) => item.link}
                 renderItem={({ item }) => {
-                    //atualmente só exibe o título, faça com que apareça data de publicação, 
-                    //descrição (pode cortar em 100 ou 200 caracteres para não ficar muito grande), e imagem (caso tenha)
-                    //ao clicar em uma notícia, devemos chamar a função abrirLink que direciona o usuário para o link da notícia
+                    
                     return (
                         <>
                             <View style={styles.row}>

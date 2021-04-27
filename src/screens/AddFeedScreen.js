@@ -4,12 +4,16 @@ import { StyleSheet } from 'react-native';
 import FeedForm from '../components/FeedForm';
 import {Context} from '../context/FeedListContext';
 
+//Esta view traz o componente de formulário em que é passado o título e url do feed
+//Aqui passa as props indicadas no formulário (o título do botão e a ação de submit)
+//Após clicar no botão, será redirecionado para o Index
+
 const AddFeedScreen = ({ navigation }) => {
     const { addFeed } = useContext(Context);
     
     return (
         <>
-            <FeedForm 
+            <FeedForm style={styles.row} 
                 buttonTitle="Adicionar Feed"
                 onSubmit={
                     (title, content) => {
@@ -31,17 +35,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderTopWidth: 1,
         borderColor: 'gray'
-    },
-    icon: {
-        fontSize: 24
-    },
-    input: {
-        fontSize: 18,
-        borderWidth: 1,
-        borderColor: 'black',
-        marginBottom: 15,
-        padding: 5,
-        margin: 5
     }
 });
 

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 
+//Componente do formulário que recebe três parâmetros.
+//Um deles é o objeto que vai receber dois estados, de título e url
+//Na view de adição de feed, esses estados serão despachados para o context
+//onde serão persistidos no banco. 
+
 const FeedForm = ({ onSubmit, buttonTitle, initialValues }) => {
     const [title, setTitle] = useState(initialValues.title);
     const [content, setContent] = useState(initialValues.content);

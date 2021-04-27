@@ -1,16 +1,20 @@
 import axios from 'axios';
 
 export default (urlFeed) => {
-    //TODO check if we need headers later
+    //Criando a api para as requisições http
     const api = axios.create({
-        baseURL: urlFeed,
+        baseURL: urlFeed, 
         headers: {
-            'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS', 
+            'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
             'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
             'Content-Type': 'application/json', 
-            'Access-Control-Allow-Origin' : '*',  
+            'Access-Control-Allow-Origin' : '*',
+            'X-Requested-With': 'XMLHttpRequest'
+             
         }
     });
 
     return api;
 };
+
+ 

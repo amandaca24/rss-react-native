@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const KEY = 'saved_feed';
 //Método da biblioteca AsyncStore. Ela só salva String, portanto para salvar 
 //objetos é preciso serializá-los para JSON.
+//Todos os métodos são da biblioteca AsyncStorage para salvar, recuperar e apagar os dados.
 const saveFeeds = async (value) => {
     try {
         const jsonValue = JSON.stringify(value);
@@ -27,7 +28,6 @@ const clearStorage = async () => {
     }
 }
 
-//Pegar um objeto armazenado
 const getMyFeed = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem(KEY).then(console.log);
@@ -41,7 +41,6 @@ const getMyFeed = async () => {
   
   }
 
-  //Vai buscar todas as chaves armazenadas no AsyncStorage
   const getAllKeys = async () => {
     let keys = []
     try {
@@ -55,7 +54,7 @@ const getMyFeed = async () => {
 
   const deleteItem = async () => {
     try {
-        await AsyncStorage.removeItem('@key')
+        await AsyncStorage.removeItem(KEY)
       } catch(e) {
         alert('Houve algum problema ao apagar o feed');
         console.log('Erro: ' + e);
@@ -64,6 +63,14 @@ const getMyFeed = async () => {
       console.log('Done.')
   }
 
+//O reducer tem como objetivo pegar o dispatch enviado da View, trazendo o state global, e transformá-lo em ação,
+//retornando um novo estado de acordo com a ação realizada. Neste caso, há a ação de salvar,
+//em que é chamado o método do AsyncStorage mencionado acima; de apagar um ou todos os dados 
+//salvos; os de recuperar os dados salvos e o de restaurar o estado de acordo com o dispatch.
+//A cada atualização do estado, o reducer irá avisar à view enviando o novo estado, 
+//como acontece no ViewModel com um Live Data, observando e fazendo uma ação a cada mudança.
+//As informações do estado ficam armazenadas na variável payload, que informamos em cada método listado
+//abaixo do Reducer. Estes métodos são os responsáveis por receber o estado das Views. 
 const feedListReducer = (state, action) => {
     let newState = [];
     switch (action.type) {
@@ -128,7 +135,6 @@ const getFeeds = dispatch => {
         if(callback){
             callback();
         }
-        
     }
 }
 
@@ -170,7 +176,8 @@ const rssFeeds = [
         urlImagem: ''
     }
 ];
-
+//Para ser acessado pelos outros componentes da aplicação é preciso exportar 
+//as constantes
 export const { Context, Provider } = createDataContext(
     feedListReducer,
     { addFeed, deleteFeed, restoreState, deleteAll, getFeeds, getFeed }, 

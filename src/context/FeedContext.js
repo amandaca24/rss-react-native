@@ -50,6 +50,8 @@ const getItem = async () => {
       console.log('Done.')
   }
 
+//Os dados do conteúdo do feed são recuperados pela biblioteca de leitura de XML, o fast-xml-parser.
+//O estado é espalhado e cada atributo recebe o seu valor, sendo salvo sob a chave 'items'.  
 const feedReducer = (state, action) => {
     let newState = [];
     switch (action.type) {
@@ -57,11 +59,11 @@ const feedReducer = (state, action) => {
             newState = [
                 ...state,
                 {
-                    titulo: action.payload.feedItems.channel.title,
-                    dataPublicacao: feedItems.channel.pubDate,
-                    link: action.payload.feedItems.channel.link,
-                    descricao: action.payload.feedItems.channel.description,
-                    imagem: action.payload.feedItems.channel.image, 
+                    titulo: action.payload.channel.title,
+                    dataPublicacao: action.payload.channel.pubDate,
+                    link: action.payload.channel.link,
+                    descricao: action.payload.channel.description,
+                    imagem: action.payload.channel.image, 
                 }
             ];
             saveItems(newState);

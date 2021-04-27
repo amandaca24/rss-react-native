@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 const IndexScreen = ({ navigation }) => {
     const { state, deleteFeed, restoreState, deleteAll } = useContext(Context);
 
+    //Limpa os dados do estado assim que a aplicação é iniciada 
     useEffect(() => {
         restoreState();
     }, []);
