@@ -63,7 +63,8 @@ const feedReducer = (state, action) => {
                     dataPublicacao: action.payload.channel.pubDate,
                     link: action.payload.channel.link,
                     descricao: action.payload.channel.description,
-                    imagem: action.payload.channel.image, 
+                    imagem: action.payload.channel.image,
+                    urlFeed: action.payload.urlFeed 
                 }
             ];
             saveItems(newState);
@@ -72,6 +73,20 @@ const feedReducer = (state, action) => {
             newState = state.filter(
                 (feed) => feed.urlFeed === action.payload);
                 getItem(newState);
+            return newState;
+        case 'add_item':
+            newState = [
+                ...state,
+                {
+                    titulo: action.payload.titulo,
+                    dataPublicacao: action.payload.dataPublicacao,
+                    link: action.payload.link,
+                    descricao: action.payload.descricao,
+                    imagem: action.payload.imagem,
+                    urlFeed: action.payload.urlFeed
+                }
+            ];
+            saveItems(newState);
             return newState;
         case 'delete_item':
             newState = state.filter(
@@ -88,6 +103,15 @@ const feedReducer = (state, action) => {
         default:
             return state;
     } 
+};
+
+const addItem = dispatch => {
+    return (titulo, dataPublicacao, link, descricao, imagem, callback) => {
+        dispatch({ type: 'add_item', payload: { titulo, dataPublicacao, link, descricao, imagem } });
+        if (callback) {
+            callback();
+        }
+    };
 };
 
 const getFeedItem = dispatch =>{
@@ -149,6 +173,6 @@ const rssItems = [
 
 export const { Context, Provider } = createDataContext(
     feedReducer,
-    { deleteItem, fetchItems, restoreState, deleteAll, getFeedItem },
+    { deleteItem, fetchItems, restoreState, deleteAll, getFeedItem, addItem },
     rssItems
 );

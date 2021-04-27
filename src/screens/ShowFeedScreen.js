@@ -9,15 +9,16 @@ import { FontAwesome } from '@expo/vector-icons';
 import useResults from '../hooks/useResults';
 
 const ShowFeedScreen = ({ navigation }) => {
-    const feedListContext = useContext(FeedListContext);
-    const feedID = navigation.getParam('id');
-    const feed = feedListContext.state.find((feed) => feed.urlFeed === feedID);
-    const fetch = rssfeed(feed.urlFeed);
-    const { state, fetchItems, deleteItem, restoreState } = useContext(FeedContext);
-    fetchItems(fetch);
+    const feedListContext = useContext(FeedListContext); //comunicação entre a classe de contexto com a view para uso do estado e métodos
+    const feedID = navigation.getParam('id'); //id passado da view anterior
+    const feed = feedListContext.state.find((feed) => feed.urlFeed === feedID); //vai buscar no contexto o feed com id passado como parâmetro
+    const fetch = rssfeed(feed.urlFeed); //vai criar uma instância de requisão http via axios
+    const { state, fetchItems, deleteItem, restoreState } = useContext(FeedContext); //comunicação com o contexto dos itens
+    fetchItems(fetch); //método que faz análise do xml via fast-xml-parser e salva os atributos localmente
 
     //useResults();
 
+    //Atualiza o estado a cada mudança no estado de FeedContext. Só é chamado após a renderização do DOM.
     useEffect(() => {
         restoreState();
     }, []);
@@ -31,6 +32,7 @@ const ShowFeedScreen = ({ navigation }) => {
     //para preencher a lista
     return (
         <>
+            <FontAwesome name='plus-circle' style={styles.icon} color='black' onPress={() => navigation.navigate('Add', { item: 'true' })}/>
             <FlatList
                 data={state}
                 keyExtractor={(item) => item.link}

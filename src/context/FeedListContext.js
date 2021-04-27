@@ -67,8 +67,8 @@ const getMyFeed = async () => {
 //retornando um novo estado de acordo com a ação realizada. Neste caso, há a ação de salvar,
 //em que é chamado o método do AsyncStorage mencionado acima; de apagar um ou todos os dados 
 //salvos; os de recuperar os dados salvos e o de restaurar o estado de acordo com o dispatch.
-//A cada atualização do estado, o reducer irá avisar à view enviando o novo estado, 
-//como acontece no ViewModel com um Live Data, observando e fazendo uma ação a cada mudança.
+//Com o método de restaurar o estado, a cada atualização do estado, o reducer irá avisar à view enviando o novo estado, 
+//como acontece no ViewModel usando um Live Data, observando e fazendo uma ação a cada mudança.
 //As informações do estado ficam armazenadas na variável payload, que informamos em cada método listado
 //abaixo do Reducer. Estes métodos são os responsáveis por receber o estado das Views. 
 const feedListReducer = (state, action) => {
