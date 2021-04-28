@@ -12,7 +12,7 @@ const FeedForm = ({ onSubmit, buttonTitle, initialValues }) => {
     const [descricao, setDescricao] = useState(initialValues.description);
     const [link, setLink] = useState(initialValues.link);
     const [imagem, setImagem] = useState(initialValues.imagem);
-    const [urlFeed, setUrlFeed] = useState(initialValues.imagem);
+    const [urlFeed, setUrlFeed] = useState(initialValues.urlFeed);
 
     return (
         <View>
@@ -41,7 +41,11 @@ const FeedForm = ({ onSubmit, buttonTitle, initialValues }) => {
 FeedForm.defaultProps = {
     initialValues: {
         title: '',
-        content: ''
+        dataPublicacao: '',
+        descricao: '',
+        link: '',
+        imagem: '',
+        urlFeed: ''
     }
 }
 

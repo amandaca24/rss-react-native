@@ -32,8 +32,7 @@ const ShowFeedScreen = ({ navigation }) => {
     //para preencher a lista
     return (
         <>
-            <FontAwesome name='plus-circle' style={styles.icon} color='black' onPress={() => navigation.navigate('Add', { item: 'true' })}/>
-            <FlatList
+           <FlatList
                 data={state}
                 keyExtractor={(item) => item.link}
                 renderItem={({ item }) => {
@@ -58,6 +57,16 @@ const ShowFeedScreen = ({ navigation }) => {
             />
         </>
     );
+};
+
+ShowFeedScreen.navigationOptions = ({ navigation }) => {
+    return {
+        headerRight: () => (
+            <FontAwesome style={styles.icon} name='plus-circle' color='black' 
+                onPress={() => navigation.navigate('Add', {item: 'true'})} />
+
+        )
+    };
 };
 
 //altere os estilos como desejar para melhorar o layout

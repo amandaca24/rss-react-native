@@ -59,11 +59,11 @@ const feedReducer = (state, action) => {
             newState = [
                 ...state,
                 {
-                    titulo: action.payload.channel.title,
-                    dataPublicacao: action.payload.channel.pubDate,
-                    link: action.payload.channel.link,
-                    descricao: action.payload.channel.description,
-                    imagem: action.payload.channel.image,
+                    titulo: action.payload.title,
+                    dataPublicacao: action.payload.pubDate,
+                    link: action.payload.link,
+                    descricao: action.payload.description,
+                    imagem: action.payload.image,
                     urlFeed: action.payload.urlFeed 
                 }
             ];
@@ -134,8 +134,9 @@ const deleteItem = dispatch => {
 const fetchItems = dispatch => async (fetch) => {
     const response = await fetch.get();
     const feedItems = parse(response.data);
+    const items = feedItems.rss.channel.item
     return () => {
-        dispatch({type: 'fetch_items', payload: feedItems});
+        dispatch({type: 'fetch_items', payload: {items}});
     }
 };
 
