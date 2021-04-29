@@ -19,9 +19,9 @@ const ShowFeedScreen = ({ navigation }) => {
     //useResults();
 
     //Só é chamado após a renderização do DOM.
-    //useEffect(() => {
-    //    restoreState();
-    //}, []);
+    useEffect(() => {
+        restoreState();
+    }, []);
    
     //Abre o link no navegador 
     const abrirLink = (link) => {
@@ -40,20 +40,20 @@ const ShowFeedScreen = ({ navigation }) => {
                     return (
                         <>
                             <View style={styles.row}>
-                                <Text style={styles.dataPublicacao}>{item.dataPublicacao}</Text>
-                            </View>
-                            <View style={styles.row}>
+                                <Image style={styles.image} source={item.imagem ? item.imagem : 'https://cdn.iconscout.com/icon/free/png-512/data-not-found-1965034-1662569.png'} />
                                 <Text style={styles.titulo}>{item.titulo}</Text>
+                                <Text style={styles.dataPublicacao}>{item.dataPublicacao}</Text>
                                 
+                                <FontAwesome style={styles.icon} name='trash-o' color='black' 
+                                    onPress={() => deleteItem(item.link)} />
+                               
                             </View>
                             <View style={styles.row}>
-                                <Text style={styles.descricao} numberOfLines={2} ellipsizeMode='tail' 
+                                <Text style={styles.descricao} numberOfLines={3} ellipsizeMode='tail' 
                                     onPress={() => abrirLink(item.link)}>
                                         {item.descricao}
                                 </Text>
-                                <View style={styles.row}>
-                                    <FontAwesome style={styles.icon} name='trash-o' color='black' onPress={() => deleteItem(item.link)} />
-                                </View>
+                                
                             </View>
                         </>
                     );
@@ -77,7 +77,7 @@ ShowFeedScreen.navigationOptions = ({ navigation }) => {
 const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         padding: 2,
         borderTopWidth: 1,
         borderColor: 'gray'
@@ -97,8 +97,9 @@ const styles = StyleSheet.create({
     descricao: {
         fontSize: 12, 
         flex: 1,
+        justifyContent: 'space-between',
         textAlign: 'justify',
-        textAlignVertical: 'center'
+        flex: 2,
     },
     dataPublicacao: {
         fontSize: 10,

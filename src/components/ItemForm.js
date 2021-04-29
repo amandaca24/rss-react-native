@@ -12,7 +12,6 @@ const FeedForm = ({ onSubmit, buttonTitle, initialValues }) => {
     const [descricao, setDescricao] = useState(initialValues.description);
     const [link, setLink] = useState(initialValues.link);
     const [imagem, setImagem] = useState(initialValues.imagem);
-    const [urlFeed, setUrlFeed] = useState(initialValues.urlFeed);
 
     return (
         <View>
@@ -26,12 +25,10 @@ const FeedForm = ({ onSubmit, buttonTitle, initialValues }) => {
             <TextInput style={styles.input} value={link} onChangeText={text => setLink(text)} />
             <Text style={styles.label}>Imagem</Text>
             <TextInput style={styles.input} value={imagem} onChangeText={text => setImagem(text)} />
-            <Text style={styles.label}>URL do Feed</Text>
-            <TextInput style={styles.input} value={urlFeed} onChangeText={text => setUrlFeed(text)} />
             <Button
                 title={buttonTitle}
                 onPress={() => {
-                    onSubmit(title, dataPublicacao, descricao, link, imagem, urlFeed);
+                    onSubmit(title, dataPublicacao, descricao, link, imagem );
                 }}
             />
         </View>
@@ -45,7 +42,6 @@ FeedForm.defaultProps = {
         descricao: '',
         link: '',
         imagem: '',
-        urlFeed: ''
     }
 }
 
