@@ -22,7 +22,7 @@ const IndexScreen = ({ navigation }) => {
                 keyExtractor={(feed) => feed.urlFeed}
                 renderItem={({ item }) => {
                     return (
-                        <View>
+                        <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.urlFeed })}>
                             <View style={styles.row}>
                                 <Text style={styles.title}>{item.titulo}</Text>
                                 <View style={styles.row}>
@@ -31,10 +31,8 @@ const IndexScreen = ({ navigation }) => {
                                     <FontAwesome style={styles.icons} name='trash-o' size={30} color='black' 
                                         onPress={() => deleteFeed(item.urlFeed) } />
                                 </View>
-                                
-                                
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     ); 
                 }}
             />

@@ -15,13 +15,13 @@ const ShowFeedScreen = ({ navigation }) => {
     const fetch = rssfeed(feed.urlFeed); //vai criar uma instância de requisão http via axios
     const { state, fetchItems, deleteItem, restoreState } = useContext(FeedContext); //comunicação com o contexto dos itens
     fetchItems(fetch); //método que faz análise do xml via fast-xml-parser e salva os atributos localmente
-
+    
     //useResults();
 
-    //Atualiza o estado a cada mudança no estado de FeedContext. Só é chamado após a renderização do DOM.
-    useEffect(() => {
-        restoreState();
-    }, []);
+    //Só é chamado após a renderização do DOM.
+    //useEffect(() => {
+    //    restoreState();
+    //}, []);
    
     //Abre o link no navegador 
     const abrirLink = (link) => {
@@ -40,16 +40,20 @@ const ShowFeedScreen = ({ navigation }) => {
                     return (
                         <>
                             <View style={styles.row}>
-                                <Image style={styles.image} source={{ uri: item.imagem }}/>
-                                <Text style={styles.titulo}>{item.titulo}</Text>
                                 <Text style={styles.dataPublicacao}>{item.dataPublicacao}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.titulo}>{item.titulo}</Text>
+                                
                             </View>
                             <View style={styles.row}>
                                 <Text style={styles.descricao} numberOfLines={2} ellipsizeMode='tail' 
                                     onPress={() => abrirLink(item.link)}>
                                         {item.descricao}
                                 </Text>
-                                <FontAwesome style={styles.icon} name='trash-o' color='black' onPress={() => deleteItem(item.link)} />
+                                <View style={styles.row}>
+                                    <FontAwesome style={styles.icon} name='trash-o' color='black' onPress={() => deleteItem(item.link)} />
+                                </View>
                             </View>
                         </>
                     );
@@ -74,25 +78,24 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 20,
-        paddingHorizontal: 10,
+        padding: 2,
         borderTopWidth: 1,
         borderColor: 'gray'
     },
     titulo: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'left'
     },
     image: {
         //pode alterar largura e altura como desejar
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         borderRadius: 4,
         margin: 5
     },
     descricao: {
-        fontSize: 14, 
+        fontSize: 12, 
         flex: 1,
         textAlign: 'justify',
         textAlignVertical: 'center'
