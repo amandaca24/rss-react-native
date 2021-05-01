@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { Card, Button, FAB } from 'react-native-elements';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useContext, useEffect } from 'react';
 import { Context } from '../context/FeedListContext';
 import { FontAwesome } from '@expo/vector-icons';
+import Styles from '../styles/Styles';
 
 const IndexScreen = ({ navigation }) => {
     const { state, deleteFeed, restoreState, deleteAll } = useContext(Context);
@@ -16,9 +17,9 @@ const IndexScreen = ({ navigation }) => {
 
     
     return (
-        <>
+        <View style={Styles.view}>
             <Card>
-                <Card.Title> <FontAwesome name="rss" style={styles.icons} color='black' size={24} />
+                <Card.Title> <FontAwesome name="rss" style={Styles.icons} color='black' size={24} />
                     RSS Feed React</Card.Title>
                 <Card.FeaturedSubtitle>Todos os seus feeds em um só lugar</Card.FeaturedSubtitle>
                 <Card.Divider/>
@@ -27,60 +28,39 @@ const IndexScreen = ({ navigation }) => {
                     keyExtractor={(feed) => feed.urlFeed}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.urlFeed })}>
-                                <View style={styles.row}>
-                                    <Text style={styles.title}>{item.titulo}</Text>
-                                    <View style={styles.row}>
-                                        <FontAwesome style={styles.icons} name='pencil' size={24} color='black' 
-                                            onPress={() => navigation.navigate('Show', { id: item.urlFeed })} />
-                                        <FontAwesome style={styles.icons} name='trash-o' size={24} color='black' 
-                                            onPress={() => deleteFeed(item.urlFeed) } />
+                            <Card>
+                                <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.urlFeed })}>
+                                    <View style={Styles.row}>
+                                        <Card.Title style={Styles.title}>{item.titulo}</Card.Title>
+                                        <Card.Divider/>
+                                        <View style={Styles.row}>
+                                            <FontAwesome style={Styles.icons} name='pencil' size={24} color='black' 
+                                                onPress={() => navigation.navigate('Show', { id: item.urlFeed })} />
+                                            <FontAwesome style={Styles.icons} name='trash-o' size={24} color='black' 
+                                                onPress={() => deleteFeed(item.urlFeed) } />
+                                        </View>
                                     </View>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
+                            </Card>
                         ); 
                     }}
                 />
             </Card>
-            <FAB icon={<FontAwesome name="trash-o" style={styles.icons} size={24}/>} 
+            <FAB icon={<FontAwesome name="trash-o" style={Styles.icons} size={24}/>} 
                 placement='right' color='#d32f2f' size='small' onPress={deleteAll}/>
-    </>
+    </View>
     );
 };
 
 IndexScreen.navigationOptions = ({ navigation }) => {
     return {
         headerRight: () => (
-            <FontAwesome style={styles.icons} name='plus-circle' color='black' size={30} 
+            <FontAwesome style={Styles.icons} name='plus-circle' color='black' size={30} 
                 onPress={() => navigation.navigate('Add')} />
 
         )
     };
 };
 
-
-const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-        borderTopWidth: 1,
-        borderColor: 'gray'
-    },
-    title: {
-        fontSize: 18, 
-        padding: 5,
-    },
-    icons: {
-        borderRadius: 5,
-        padding: 5,
-        size: 24,
-    },
-    button: {
-        color: 'red',
-        textDecorationColor: 'black'
-    }
-});
 
 export default IndexScreen;

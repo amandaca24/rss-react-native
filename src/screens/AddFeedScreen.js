@@ -5,6 +5,7 @@ import FeedForm from '../components/FeedForm';
 import {Context as FeedListContext} from '../context/FeedListContext';
 import ItemForm from '../components/ItemForm';
 import { Context as FeedContext} from '../context/FeedContext';
+import Styles from '../styles/Styles';
 
 //Esta view traz o componente de formulário em que é passado o título e url do feed
 //Aqui passa as props indicadas no formulário (o título do botão e a ação de submit)
@@ -19,7 +20,7 @@ const AddFeedScreen = ({ navigation }) => {
     if(isItem === 'true'){
         return(
             <>
-            <ItemForm style={styles.row} 
+            <ItemForm 
                 buttonTitle="Adicionar Feed"
                 onSubmit={
                     (title, dataPublicacao, descricao, link, imagem) => {
@@ -33,7 +34,7 @@ const AddFeedScreen = ({ navigation }) => {
     }
     return (
         <>
-            <FeedForm style={styles.row} 
+            <FeedForm  
                 buttonTitle="Adicionar Feed"
                 onSubmit={
                     (title, content) => {
@@ -47,16 +48,6 @@ const AddFeedScreen = ({ navigation }) => {
     );
 };
 
-const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-        borderTopWidth: 1,
-        borderColor: 'gray'
-    }
-});
 
 AddFeedScreen.defaultProps = {
     initialValues: {

@@ -17,7 +17,7 @@ const navigator = createStackNavigator(
     initialRouteName: 'Index',
     defaultNavigationOptions: {
       title: 'RSS Feed',
-      headerStyle: { backgroundColor: '#7e57c2' },
+      headerStyle: { backgroundColor: '#455a64' },
     }
   }
 );

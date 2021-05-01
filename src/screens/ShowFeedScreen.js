@@ -7,6 +7,8 @@ import { useContext, useEffect } from 'react';
 import rssfeed from '../api/rssfeed';
 import { FontAwesome } from '@expo/vector-icons';
 import useResults from '../hooks/useResults';
+import { Card } from 'react-native-elements';
+import Styles from '../styles/Styles';
 
 const ShowFeedScreen = ({ navigation }) => {
     const feedListContext = useContext(FeedListContext); //comunicação entre a classe de contexto com a view para uso do estado e métodos
@@ -39,22 +41,24 @@ const ShowFeedScreen = ({ navigation }) => {
                     
                     return (
                         <>
-                            <View style={styles.row}>
-                                <Image style={styles.image} source={item.imagem ? item.imagem : 'https://cdn.iconscout.com/icon/free/png-512/data-not-found-1965034-1662569.png'} />
-                                <Text style={styles.titulo}>{item.titulo}</Text>
-                                <Text style={styles.dataPublicacao}>{item.dataPublicacao}</Text>
+                            <Card>
+                                <Card.Title>{item.titulo}</Card.Title>
+                                <View style={Styles.row}>
+                                    <Image style={Styles.image} source={item.imagem ? item.imagem : 'https://cdn.iconscout.com/icon/free/png-512/data-not-found-1965034-1662569.png'} />
+                                    <Text style={Styles.dataPublicacao}>{item.dataPublicacao}</Text>
+                                    
+                                    <FontAwesome style={Styles.icons} name='trash-o' color='black' size={24} 
+                                        onPress={() => deleteItem(item.link)} />
                                 
-                                <FontAwesome style={styles.icon} name='trash-o' color='black' 
-                                    onPress={() => deleteItem(item.link)} />
-                               
-                            </View>
-                            <View style={styles.row}>
-                                <Text style={styles.descricao} numberOfLines={3} ellipsizeMode='tail' 
-                                    onPress={() => abrirLink(item.link)}>
-                                        {item.descricao}
-                                </Text>
-                                
-                            </View>
+                                </View>
+                                <View style={Styles.row}>
+                                    <Text style={Styles.descricao} numberOfLines={3} ellipsizeMode='tail' 
+                                        onPress={() => abrirLink(item.link)}>
+                                            {item.descricao}
+                                    </Text>
+                                    
+                                </View>
+                            </Card>
                         </>
                     );
                 }}
@@ -66,49 +70,11 @@ const ShowFeedScreen = ({ navigation }) => {
 ShowFeedScreen.navigationOptions = ({ navigation }) => {
     return {
         headerRight: () => (
-            <FontAwesome style={styles.icon} name='plus-circle' color='black' 
+            <FontAwesome style={Styles.icon} name='plus-circle' color='black' size={30} 
                 onPress={() => navigation.navigate('Add', {item: 'true'})} />
 
         )
     };
 };
-
-//altere os estilos como desejar para melhorar o layout
-const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        padding: 2,
-        borderTopWidth: 1,
-        borderColor: 'gray'
-    },
-    titulo: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        textAlign: 'left'
-    },
-    image: {
-        //pode alterar largura e altura como desejar
-        width: 50,
-        height: 50,
-        borderRadius: 4,
-        margin: 5
-    },
-    descricao: {
-        fontSize: 12, 
-        flex: 1,
-        justifyContent: 'space-between',
-        textAlign: 'justify',
-        flex: 2,
-    },
-    dataPublicacao: {
-        fontSize: 10,
-        fontStyle: 'italic'
-    },
-    icon: {
-        fontSize: 24,
-        padding: 5,
-    }
-});
 
 export default ShowFeedScreen;
